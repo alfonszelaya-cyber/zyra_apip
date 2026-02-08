@@ -6,13 +6,14 @@ from passlib.context import CryptContext
 from app.db.session import SessionLocal
 from app.models.user import User
 
-# 🔐 Configuración de hash (Enterprise)
+# 🔐 Configuración de hash (Enterprise Ready)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
-# ✅ INYECTADO
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
