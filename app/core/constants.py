@@ -1,0 +1,3 @@
+APP_OWNER = "JAZA GLOBAL"
+ARCHITECTURE_LEVEL = "Enterprise"
+BUILD_TARGET = "10+ Years Stable"
