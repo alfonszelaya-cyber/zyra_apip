@@ -2,7 +2,7 @@ from app.core.application import create_app
 from app.routes.health import router as health_router
 from app.routes.status import router as status_router
 from app.routes.system import router as system_router
-
+from app.db.session import engine
 app = create_app()
 
 @app.get("/")
