@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from app.routes.health import router as health_router
 from app.routes.status import router as status_router
+from app.core.config import settings
 
 app = FastAPI(
-    title="ZYRA API",
-    version="1.0.0"
+    title=settings.app_name,
+    version=settings.version
 )
 
 @app.get("/")
