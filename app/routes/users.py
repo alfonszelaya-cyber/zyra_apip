@@ -1,9 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
+from passlib.context import CryptContext
 
 from app.db.session import SessionLocal
 from app.models.user import User
+
+# 🔐 Configuración de hash (Enterprise)
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
 
 router = APIRouter(
     prefix="/users",
@@ -35,7 +43,7 @@ def create_user(
     new_user = User(
         email=email,
         full_name=full_name,
-        hashed_password=password  # luego aquí pondremos hash real
+        hashed_password=hash_password(password)  # 🔐 Ahora sí seguro
     )
 
     db.add(new_user)
