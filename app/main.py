@@ -1,15 +1,15 @@
 from fastapi import FastAPI
-from datetime import datetime
+from app.routes.health import router as health_router
+from app.routes.status import router as status_router
 
-app = FastAPI()
+app = FastAPI(
+    title="ZYRA API",
+    version="1.0.0"
+)
 
 @app.get("/")
-def root():
+def read_root():
     return {"Zyra": "Sistema Limpio Online"}
 
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "timestamp": datetime.utcnow().isoformat()
-    }
+app.include_router(health_router)
+app.include_router(status_router)
