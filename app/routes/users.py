@@ -12,6 +12,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
+# ✅ INYECTADO
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
 
 router = APIRouter(
     prefix="/users",
@@ -43,7 +47,7 @@ def create_user(
     new_user = User(
         email=email,
         full_name=full_name,
-        hashed_password=hash_password(password)  # 🔐 Ahora sí seguro
+        hashed_password=hash_password(password)
     )
 
     db.add(new_user)
