@@ -11,8 +11,5 @@ app = FastAPI(
 def read_root():
     return {"Zyra": "Sistema Limpio Online"}
 
-# Health route
 app.include_router(health_router)
-
-# Status route
 app.include_router(status_router)
