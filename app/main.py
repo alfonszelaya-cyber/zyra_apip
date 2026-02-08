@@ -2,8 +2,12 @@ from app.core.application import create_app
 from app.routes.health import router as health_router
 from app.routes.status import router as status_router
 from app.routes.system import router as system_router
-from app.db.session import engine
+from app.db.session import init_db
+
 app = create_app()
+
+# Inicializa base de datos
+init_db()
 
 @app.get("/")
 def read_root():
