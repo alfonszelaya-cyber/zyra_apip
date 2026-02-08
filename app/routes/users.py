@@ -1,0 +1,64 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from typing import List
+
+from app.db.session import SessionLocal
+from app.models.user import User
+
+router = APIRouter(
+    prefix="/users",
+    tags=["Users"]
+)
+
+
+# Dependency para obtener sesión DB
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# Crear usuario
+@router.post("/")
+def create_user(
+    email: str,
+    full_name: str,
+    password: str,
+    db: Session = Depends(get_db)
+):
+    existing_user = db.query(User).filter(User.email == email).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    new_user = User(
+        email=email,
+        full_name=full_name,
+        hashed_password=password  # luego aquí pondremos hash real
+    )
+
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    return {
+        "id": new_user.id,
+        "email": new_user.email,
+        "full_name": new_user.full_name
+    }
+
+
+# Listar usuarios
+@router.get("/", response_model=List[dict])
+def list_users(db: Session = Depends(get_db)):
+    users = db.query(User).all()
+
+    return [
+        {
+            "id": user.id,
+            "email": user.email,
+            "full_name": user.full_name
+        }
+        for user in users
+    ]
