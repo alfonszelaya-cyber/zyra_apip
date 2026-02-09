@@ -1,5 +1,6 @@
 from passlib.context import CryptContext
 
+from app.routes.auth import router as auth_router
 from app.core.application import create_app
 from app.routes.health import router as health_router
 from app.routes.status import router as status_router
