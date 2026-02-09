@@ -36,7 +36,10 @@ def login(
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     access_token = create_access_token(
-        data={"sub": user.email},
+        data={
+            "sub": user.email,
+            "role": "ROOT"   # ✅ Inyectado sin borrar nada
+        },
         expires_delta=timedelta(minutes=60)
     )
 
