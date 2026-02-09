@@ -1,4 +1,3 @@
-
 from passlib.context import CryptContext
 
 from app.core.application import create_app
@@ -7,10 +6,14 @@ from app.routes.status import router as status_router
 from app.routes.system import router as system_router
 from app.routes.users import router as users_router
 from app.db.session import init_db
+from app.core.security import log_request  # ✅ Inyectado
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = create_app()
+
+# ✅ Middleware Seguridad / Logging
+app.middleware("http")(log_request)
 
 # Inicializa base de datos
 init_db()
