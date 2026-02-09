@@ -1,4 +1,5 @@
 from fastapi import Request
+from fastapi.security import OAuth2PasswordBearer  # ✅ INYECTADO
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -18,6 +19,9 @@ logger = logging.getLogger("ZYRA_SECURITY")
 SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE_THIS_SUPER_SECRET")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
+
+# ✅ INYECTADO PARA SWAGGER (candado)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 pwd_context = CryptContext(
     schemes=["bcrypt"],
