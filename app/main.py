@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 
-from app.routes.auth import router as auth_router
+from app.routes.protected import router as protected_router
 from app.core.application import create_app
 from app.routes.health import router as health_router
 from app.routes.status import router as status_router
@@ -31,3 +31,4 @@ app.include_router(status_router)
 app.include_router(system_router)
 app.include_router(users_router)
 app.include_router(auth_router)  # ✅ INYECTADO
+app.include_router(protected_router)
