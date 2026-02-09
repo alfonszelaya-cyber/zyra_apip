@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError
 from sqlalchemy.orm import Session
 
@@ -10,6 +11,8 @@ router = APIRouter(
     prefix="/protected",
     tags=["Protected"]
 )
+
+security = HTTPBearer()
 
 # Dependency DB
 def get_db():
@@ -23,18 +26,10 @@ def get_db():
 # 🔐 Endpoint protegido
 @router.get("/")
 def protected_route(
-    authorization: str = Header(None),
+    credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
 ):
-    if not authorization:
-        raise HTTPException(status_code=401, detail="Authorization header missing")
-
-    try:
-        scheme, token = authorization.split()
-        if scheme.lower() != "bearer":
-            raise HTTPException(status_code=401, detail="Invalid auth scheme")
-    except ValueError:
-        raise HTTPException(status_code=401, detail="Invalid authorization format")
+    token = credentials.credentials
 
     payload = decode_token(token)
 
