@@ -66,7 +66,7 @@ def create_user(
     }
 
 
-# Listar usuarios (🔒 protegido)
+# Listar usuarios (🔒 protegido con JWT)
 @router.get("/", response_model=List[dict])
 def list_users(
     credentials: HTTPAuthorizationCredentials = Depends(security),
