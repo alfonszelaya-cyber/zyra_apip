@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import JWTError
 from sqlalchemy.orm import Session
 
 from app.db.session import SessionLocal
@@ -13,6 +12,7 @@ router = APIRouter(
 )
 
 security = HTTPBearer()
+
 
 # Dependency DB
 def get_db():
