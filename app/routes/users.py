@@ -6,8 +6,8 @@ from passlib.context import CryptContext
 from app.db.session import SessionLocal
 from app.models.user import User
 
-# 🔐 Configuración de hash (Enterprise Ready)
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# 🔐 Configuración de hash (Corregida para compatibilidad sin borrar tu lógica)
+pwd_context = CryptContext(schemes=["bcrypt_sha256"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
