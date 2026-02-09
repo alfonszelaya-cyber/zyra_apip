@@ -1,13 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from typing import List
 from passlib.context import CryptContext
 
 from app.db.session import SessionLocal
 from app.models.user import User
+from app.core.security import decode_token
 
 # 🔐 Configuración de hash (Enterprise Ready)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+security = HTTPBearer()
 
 
 def hash_password(password: str) -> str:
@@ -62,9 +66,18 @@ def create_user(
     }
 
 
-# Listar usuarios
+# Listar usuarios (🔒 protegido)
 @router.get("/", response_model=List[dict])
-def list_users(db: Session = Depends(get_db)):
+def list_users(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    db: Session = Depends(get_db)
+):
+    token = credentials.credentials
+    payload = decode_token(token)
+
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+
     users = db.query(User).all()
 
     return [
